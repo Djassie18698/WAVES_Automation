@@ -26,8 +26,8 @@ De workflow verloopt als volgt:
 
 | Bestand | Beschrijving |
 |--------|--------------|
+| `fullmainlogging.py` | Hoofdscript dat alles aanstuurt: tokens, VM-aanmaak, Ansible-oproep, etc. |
 | `mainfilled.py` | Variant van script met hardcoded credentials |
-| `fullmainlogging_visible_input.py` | Hoofdscript dat alles aanstuurt: tokens, VM-aanmaak, Ansible-oproep, etc. |
 | `IDFinder_basic.py` | Haalt het IP-adres van de nieuwe workspace op en past de Ansible-inventory aan. |
 | `setup_vm.yml` | Het Ansible playbook dat de workspace configureert. |
 | `inventory.ini` | Dynamisch gegenereerde Ansible-inventory met de juiste SSH-instellingen. |
