@@ -1,0 +1,95 @@
+- name: Clone repo, run script, and push back to GitHub
+  hosts: myhosts
+
+  vars:
+    ansible_user: "dean"
+    github_user: "Djassie18698"
+    github_token: ""
+    github_repo: "Djassie18698/AnsibleTest"
+    repo_url: "https://{{ github_user }}:{{ github_token }}@github.com/{{ github_repo }}.git"
+    repo_dest: "/home/{{ ansible_user }}/clone"
+
+  tasks:
+
+    - name: Install required packages
+      become: true
+      ansible.builtin.package:
+        name:
+          - git
+          - python3
+        state: present
+
+    - name: Create clone folder
+      become: true
+      ansible.builtin.file:
+        path: "{{ repo_dest }}"
+        state: directory
+        mode: '0755'
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Fix ownership recursively
+      become: true
+      ansible.builtin.file:
+        path: "{{ repo_dest }}"
+        state: directory
+        recurse: yes
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Mark as safe Git directory
+      become: false
+      ansible.builtin.command:
+        cmd: git config --global --add safe.directory {{ repo_dest }}
+
+    - name: Set Git user.name (default)
+      become: false
+      ansible.builtin.command:
+        cmd: git config --global user.name "Automation Bot"
+      changed_when: false
+      failed_when: false
+
+    - name: Set Git user.email (default)
+      become: false
+      ansible.builtin.command:
+        cmd: git config --global user.email "automation@example.com"
+      changed_when: false
+      failed_when: false
+
+    - name: Clone the GitHub repository
+      become: false
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_dest }}"
+        update: yes
+        force: yes
+
+    - name: Run the Python script
+      become: false
+      ansible.builtin.command:
+        cmd: python3 write_done.py
+        chdir: "{{ repo_dest }}"
+      register: script_result
+
+    - name: Git add all changes
+      become: false
+      ansible.builtin.command:
+        cmd: git add .
+        chdir: "{{ repo_dest }}"
+      when: script_result.rc == 0
+
+    - name: Git commit changes (even if empty)
+      become: false
+      ansible.builtin.command:
+        cmd: git commit -m "Auto commit after running script" --allow-empty
+        chdir: "{{ repo_dest }}"
+      register: commit_result
+      failed_when: false
+      when: script_result.rc == 0
+
+    - name: Push directly to GitHub using full token URL
+      become: false
+      ansible.builtin.command:
+        cmd: git push https://{{ github_user }}:{{ github_token }}@github.com/{{ github_repo }}.git
+        chdir: "{{ repo_dest }}"
+      when: script_result.rc == 0

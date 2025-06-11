@@ -1,0 +1,46 @@
+{
+  "co_id": "d144baec-29dd-4fc0-9021-5b18a9eb60ba",
+  "wallet_id": "5dd87e1f-c93e-42ca-8c00-bedb5e8397fc",
+  "co_passwordless_sudo": true,
+  "description": "this is a test workspace created by automation",
+  "name": "surftest",
+  "meta": {
+    "application_offering_id": "5db0e1a5-f34b-4d12-892f-e64df9b4e86e",
+    "application_name": "Linux server VM with SUDO",
+    "application_icon": "data:image/png;base64,...(skipped for brevity)...",
+    "application_type": "Compute",
+    "subscription_tag": "rsc-live_f21ee29a-6301-4d68-b22c-0d2ec3bde491",
+    "subscription_name": "SURF HPC Cloud",
+    "subscription_group_id": "e6ea9ca7-e833-4150-8dfd-1dcd6c49f75c",
+    "co_name": "src-aco-consultationletter-ai-zuyd",
+    "host_name": "surftest",
+    "subscription_resource_type": "VM",
+    "flavours": [
+      {
+        "id": "c2a138f6-d3c1-4eaa-84ba-a35432f2f133",
+        "name": "Ubuntu 20.04"
+      },
+      {
+        "id": "0f71f7ab-da03-4c98-9074-a03d84b6c235",
+        "name": "1 Core - 8 GB RAM"
+      }
+    ],
+	"storages": [
+      {
+        "id": "434d6af3-1f0a-433e-9081-199df4263142",
+        "type": "Workspace",
+        "name": "dean",
+        "index": 0,
+        "volume_id": "7cac4dda-cce0-4d17-b153-967ee9b58b80"
+      }
+    ],
+    "ips": [],
+    "networks": [],
+    "dataset_names": [],
+    "dataset_ids": [],
+    "interactive_parameters": [],
+    "wallet_name": "SRC account for src-aco-consultationletter-ai-zuyd",
+    "wallet_id": "5dd87e1f-c93e-42ca-8c00-bedb5e8397fc"
+  },
+  "end_time": "2025-12-31T23:59:59Z"
+}

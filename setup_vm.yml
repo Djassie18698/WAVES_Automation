@@ -1,0 +1,69 @@
+---
+- name: Install tools, clone GitHub repo, and push changes
+  hosts: myhosts
+  become: true
+
+  vars:
+    github_user: "{{ github_user }}"
+    github_token: "{{ github_token }}"
+    github_repo: "Djassie18698/AnsibleTest"
+    repo_dest: "/home/{{ ansible_user }}/ansible/github"
+
+  tasks:
+    - name: Install htop
+      ansible.builtin.package:
+        name: htop
+        state: present
+
+    - name: Install git
+      ansible.builtin.package:
+        name: git
+        state: present
+
+    - name: Install Python 3
+      ansible.builtin.package:
+        name: python3
+        state: present
+
+    - name: Clone GitHub repo
+      ansible.builtin.git:
+        repo: "https://github.com/{{ github_user }}/AnsibleTest"
+        dest: "{{ repo_dest }}"
+        update: yes
+
+    - name: Run Python script from cloned repo
+      ansible.builtin.command: python3 write_done.py
+      args:
+        chdir: "{{ repo_dest }}"
+
+    - name: Set authenticated Git remote using token
+      ansible.builtin.command: >
+        git remote set-url origin https://{{ github_user }}:{{ github_token }}@github.com/{{ github_user }}/AnsibleTest.git
+      args:
+        chdir: "{{ repo_dest }}"
+
+    - name: Configure Git identity
+      ansible.builtin.command: git config user.name "{{ github_user }}"
+      args:
+        chdir: "{{ repo_dest }}"
+
+    - name: Configure Git email (optional placeholder)
+      ansible.builtin.command: git config user.email "{{ github_user }}@example.com"
+      args:
+        chdir: "{{ repo_dest }}"
+
+    - name: Add all changes
+      ansible.builtin.command: git add .
+      args:
+        chdir: "{{ repo_dest }}"
+
+    - name: Commit changes
+      ansible.builtin.command: git commit -m "Auto-commit from Ansible"
+      args:
+        chdir: "{{ repo_dest }}"
+      ignore_errors: true
+
+    - name: Push to GitHub
+      ansible.builtin.command: git push
+      args:
+        chdir: "{{ repo_dest }}"
